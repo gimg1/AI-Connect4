@@ -45,7 +45,9 @@ public class Main {
         while(!game.isOver()) {
             for(Player p : players) {
                 System.out.println(game);
-                while(!p.makeMove(p.generateMove(game), game));
+                do {
+                    move = p.generateMove(game);
+                } while (!p.makeMove(move, game) && !game.isOver());
             }
         }
 

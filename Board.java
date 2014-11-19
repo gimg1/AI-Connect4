@@ -54,9 +54,9 @@ public class Board {
         Set<String> validMoves = new HashSet<String>();
         for(int i = 0; i < board.length; i++) {
             if(board[i][0] == EMPTY) {
-                validMoves.add("d" + i);
+                validMoves.add("d" + (i + 1));
                 if(canVeto) {
-                    validMoves.add("v" + i);
+                    validMoves.add("v" + (i + 1));
                 }
             }
         }
