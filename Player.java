@@ -28,7 +28,7 @@ public abstract class Player {
         //      1: The other player has not just played a veto
         //      2: The players last move was not a veto
         return !b.containsVeto() &&
-                (moveHistory.empty() || !moveHistory.peek().startsWith(String.valueOf(DROP)));
+                (moveHistory.empty() || !moveHistory.peek().startsWith(String.valueOf(VETO)));
     }
 
     /**
@@ -66,5 +66,10 @@ public abstract class Player {
      */
     public char getMarker() {
         return Marker;
+    }
+
+    @Override
+    public String toString() {
+        return "Player (" + Marker + ")";
     }
 }

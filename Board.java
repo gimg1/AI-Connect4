@@ -27,6 +27,8 @@ public class Board {
     private int numVetos;
     private boolean isOver;
     private Player winner;
+    private int vetoedColumn = -1;
+    private int movesSinceVeto = 0;
 
     public Board() {
         numDrops = 0;
@@ -105,6 +107,7 @@ public class Board {
                     index++;
                 }
                 numVetos++;
+                vetoedColumn = columnIndex;
             }
 
             moveHistory.push(move);
@@ -115,8 +118,26 @@ public class Board {
                 isOver = true;
                 winner = p;
             }
+
+            if(vetoedColumn != -1) {
+                if(movesSinceVeto >= 1) {
+                    clearVetos();
+                    movesSinceVeto = 0;
+                    vetoedColumn = -1;
+                } else {
+                    movesSinceVeto++;
+                }
+            }
         } else {
             throw new IllegalMoveException(move);
+        }
+    }
+
+    private void clearVetos() {
+        int r = 0;
+        for(int c = 0; c < board.length; c++) {
+            while(r < ROWS && board[c][r] == VETOED) board[c][r++] = EMPTY;
+            r = 0;
         }
     }
 
