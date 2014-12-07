@@ -1,5 +1,7 @@
 package com.college;
 
+import com.sun.javaws.exceptions.InvalidArgumentException;
+
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -141,77 +143,22 @@ public class Board {
         }
     }
 
+    /**
+     * Looks at a column and the last move made in it and counts how many in a row it has.
+     * @param col The column to investigate for a connection
+     * @return The maximum number of 'in a row' it has.
+     */
     private int maxNumConnected(int col) {
-        int column = col - 1;
         int row = 0;
-        while(board[column][row] == EMPTY) row++;
+        do {
+            row++;
+        } while(board[col - 1][row - 1] == EMPTY);
 
-        char piece = board[column][row];
-        int pieceCounter = 0;
-        int maxNumConnected = 0;
+        Position p = new Position(col, row, this);
 
-        int verticalRow;
+        System.err.println(p);
 
-        for(verticalRow = 0; verticalRow < ROWS; verticalRow++) {
-            if(board[column][verticalRow] == piece) {
-                pieceCounter++;
-            } else {
-                pieceCounter = 0;
-            }
-
-            if(pieceCounter > maxNumConnected) maxNumConnected = pieceCounter;
-        }
-
-        pieceCounter = 0;
-        int horizontalCol;
-
-        for(horizontalCol = 0; horizontalCol < COLUMNS; horizontalCol++) {
-            if(board[horizontalCol][row] == piece) {
-                pieceCounter++;
-            } else {
-                pieceCounter = 0;
-            }
-
-            if(pieceCounter > maxNumConnected) maxNumConnected = pieceCounter;
-        }
-
-        pieceCounter = 0;
-        int topDownCol = column - row;
-        int topDownRow = 0;
-        if(topDownCol >= COLUMNS) topDownCol = COLUMNS - 1;
-        else if (topDownCol < 0) topDownCol = 0;
-
-        while(topDownCol < COLUMNS && topDownRow < ROWS) {
-            if(board[topDownCol][topDownRow] == piece) {
-                pieceCounter++;
-            } else {
-                pieceCounter = 0;
-            }
-
-            if(pieceCounter > maxNumConnected) maxNumConnected = pieceCounter;
-            topDownCol++;
-            topDownRow++;
-        }
-
-        pieceCounter = 0;
-        int bottomUpCol = column - ((ROWS - 1) - row);
-        int bottomUpRow = ROWS - 1;
-        if(bottomUpCol >= COLUMNS) bottomUpCol = COLUMNS - 1;
-        else if (bottomUpCol < 0) bottomUpCol = 0;
-
-        while(bottomUpCol < COLUMNS && bottomUpRow >= 0) {
-            if(board[bottomUpCol][bottomUpRow] == piece) {
-                pieceCounter++;
-            } else {
-                pieceCounter = 0;
-            }
-
-            if(pieceCounter > maxNumConnected) maxNumConnected = pieceCounter;
-            bottomUpCol++;
-            bottomUpRow--;
-        }
-
-        return maxNumConnected;
+        return p.getMaxScore();
     }
 
     /**
@@ -254,5 +201,20 @@ public class Board {
         boardString += COLUMN_LABELS;
 
         return boardString;
+    }
+
+    public int numAvailableColumns() {
+        int availableColumns = 0;
+        for(int i = 0; i < board.length; i++) {
+            if(board[i][0] == EMPTY || board[i][0] == VETOED) {
+                availableColumns++;
+            }
+        }
+
+        return availableColumns;
+    }
+
+    public char[][] asCharArray() {
+        return this.board;
     }
 }

@@ -24,11 +24,13 @@ public abstract class Player {
      * @return boolean indicating whether the player can veto or not.
      */
     public boolean canVeto(Board b) {
-        // A player can only veto if the following conditions are met:
+        // A player can only veto if the following 3 conditions are met:
         //      1: The other player has not just played a veto
         //      2: The players last move was not a veto
+        //      3: The veto would completely prevent the other player from making a move
         return !b.containsVeto() &&
-                (moveHistory.empty() || !moveHistory.peek().startsWith(String.valueOf(VETO)));
+                (moveHistory.empty() || !moveHistory.peek().startsWith(String.valueOf(VETO))) &&
+                b.numAvailableColumns() > 1;
     }
 
     /**

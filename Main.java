@@ -58,5 +58,7 @@ public class Main {
         } else {
             System.out.println("The winner is " + winner + "!");
         }
+
+        System.out.println(game);
     }
 }
